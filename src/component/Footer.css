@@ -1,0 +1,138 @@
+.footer {
+  background: #ffffff;
+  border-top: 1px solid var(--border-color);
+  padding: 50px 0 26px;
+  position: relative;
+  z-index: 10;
+}
+
+.footer-container {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 36px;
+}
+
+.footer-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  text-decoration: none;
+}
+
+.footer-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.brand-tagline {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  max-width: 340px;
+  line-height: 1.6;
+}
+
+.links-title {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 14px;
+}
+
+.footer-links ul {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.footer-links a {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: var(--accent-blue);
+}
+
+.footer-social-icons {
+  display: flex;
+  gap: 10px;
+}
+
+.footer-social-icons a {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: all 0.2s ease;
+}
+
+.footer-social-icons a:hover {
+  color: #0f172a;
+  border-color: #0f172a;
+  background: #ffffff;
+  transform: translateY(-2px);
+}
+
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.copyright {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+.back-to-top-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 16px;
+  font-size: 0.825rem;
+  color: var(--text-main);
+  font-weight: 500;
+  cursor: pointer;
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+}
+
+.back-to-top-btn:hover {
+  background: #ffffff;
+  border-color: var(--border-hover);
+}
+
+/* Mobile Breakpoints */
+@media (max-width: 768px) {
+  .footer-top {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .footer-bottom {
+    flex-direction: column-reverse;
+    align-items: center;
+    text-align: center;
+  }
+}
