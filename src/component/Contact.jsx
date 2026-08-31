@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Check, Copy, Mail, MapPin, Phone, Send } from 'lucide-react';
+import { Check, Copy, Loader2, Mail, MapPin, Phone, Send } from 'lucide-react';
 import './Contact.css';
 
 const contactCards = [
@@ -26,18 +26,50 @@ const contactCards = [
 
 export default function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
   const [copiedEmail, setCopiedEmail] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) return;
 
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({ name: '', email: '', subject: '', message: '' });
-    }, 4000);
+    setIsSubmitting(true);
+    setErrorMsg('');
+
+    try {
+      const response = await fetch('https://formsubmit.co/ajax/dinalthathsaraperaketiya@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          _subject: formData.subject
+            ? `Portfolio Contact: ${formData.subject}`
+            : `New Portfolio Message from ${formData.name}`,
+          message: formData.message,
+          _template: 'table',
+        }),
+      });
+
+      const resData = await response.json();
+
+      if (response.ok || resData.success === 'true') {
+        setSubmitted(true);
+        setFormData({ name: '', email: '', subject: '', message: '' });
+      } else {
+        setErrorMsg('Failed to send message. Please try again or email directly.');
+      }
+    } catch (err) {
+      console.error('Contact Form Error:', err);
+      setErrorMsg('Something went wrong. Please check your internet connection or email directly.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleCopyEmail = () => {
@@ -128,10 +160,19 @@ export default function Contact() {
                   <Check size={32} />
                 </div>
                 <h3>Message Sent Successfully!</h3>
-                <p>Thank you for reaching out. I'll respond to your message as soon as possible.</p>
+                <p>Thank you for reaching out. Your message has been delivered to my inbox and I will respond to you shortly!</p>
+                <button
+                  className="submit-btn"
+                  onClick={() => setSubmitted(false)}
+                  style={{ marginTop: '16px', padding: '10px 24px' }}
+                >
+                  Send Another Message
+                </button>
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="contact-form">
+                {errorMsg && <div className="error-message">{errorMsg}</div>}
+
                 <div className="form-group">
                   <label htmlFor="name">Your Name</label>
                   <input
@@ -182,11 +223,21 @@ export default function Contact() {
                 <motion.button
                   type="submit"
                   className="submit-btn"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  disabled={isSubmitting}
+                  whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+                  whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
                 >
-                  <span>Send Message</span>
-                  <Send size={18} />
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 size={18} className="spinner" />
+                      <span>Sending...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Send Message</span>
+                      <Send size={18} />
+                    </>
+                  )}
                 </motion.button>
               </form>
             )}
@@ -196,3 +247,4 @@ export default function Contact() {
     </section>
   );
 }
+
